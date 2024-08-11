@@ -1,3 +1,4 @@
+// src/config/dbConfig.ts
 import mysql from 'mysql2/promise';
 import { env } from './envConfig';
 
@@ -12,4 +13,14 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-export default pool;
+const testConnection = async () => {
+    try {
+        await pool.getConnection();
+        console.log('Conexión a la base de datos exitosa ✅');
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error + '❌');
+        throw error;
+    }
+};
+
+export { pool, testConnection };
