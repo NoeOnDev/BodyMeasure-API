@@ -31,3 +31,14 @@ export const createPatient = async (patient: Patient) => {
         throw error;
     }
 };
+
+export const getPatientsByDoctor = async (doctorId: number) => {
+    try {
+        const query = 'SELECT * FROM patients WHERE responsible_doctor = ?';
+        const [rows] = await pool.query(query, [doctorId]);
+        return rows;
+    } catch (error) {
+        console.error('Error al obtener los pacientes del doctor:', error);
+        throw error;
+    }
+};
