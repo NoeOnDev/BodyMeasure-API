@@ -29,7 +29,7 @@ export const createDoctor = async (doctor: Doctor) => {
 
 export const loginDoctor = async (username: string, password: string) => {
     try {
-        const query = 'SELECT id, username, password FROM doctor WHERE username = ?';
+        const query = 'SELECT doctor_id, username, password FROM doctor WHERE username = ?';
         const [rows]: any = await pool.query(query, [username]);
 
         if (rows.length === 0) {
@@ -53,6 +53,18 @@ export const loginDoctor = async (username: string, password: string) => {
         return token;
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
+        throw error;
+    }
+};
+
+export const getAllDoctors = async () => {
+    try {
+        const query = 'SELECT doctor_id, name, username FROM doctor';
+        const [rows]: any = await pool.query(query);
+
+        return rows;
+    } catch (error) {
+        console.error('Error al obtener los doctores:', error);
         throw error;
     }
 };

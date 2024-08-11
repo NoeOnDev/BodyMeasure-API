@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { testConnection } from './config/dbConfig';
 import { env } from './config/envConfig';
+import doctorRoutes from './doctor/doctorRoutes';
 
 const app = express();
 const PORT = env.port;
@@ -12,6 +13,8 @@ app.use(express.json());
 app.get('/', (_req, res) => {
     res.send('Servidor funcionando correctamente 🚀');
 });
+
+app.use(doctorRoutes);
 
 const startServer = async () => {
     try {
