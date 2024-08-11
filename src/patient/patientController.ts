@@ -1,5 +1,5 @@
-import { Response } from 'express';
-import { createPatient, getPatientsByDoctor } from './patientServices';
+import { Request, Response } from 'express';
+import { createPatient, getPatientsByDoctor, loginPatient } from './patientServices';
 import { AuthRequest } from '../middleware/authenticateToken';
 
 export const addPatient = async (req: AuthRequest, res: Response) => {
@@ -34,5 +34,16 @@ export const getPatients = async (req: AuthRequest, res: Response) => {
     } catch (error) {
         console.error('Error al obtener los pacientes:', error);
         res.status(500).json({ message: 'Error al obtener los pacientes' });
+    }
+};
+
+export const loginPatientController = async (req: Request, res: Response) => {
+    try {
+        const { username, password } = req.body;
+        const token = await loginPatient(username, password);
+        res.status(200).json({ token });
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        res.status(401).json({ message: 'Credenciales inválidas' });
     }
 };

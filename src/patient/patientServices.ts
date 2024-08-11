@@ -1,5 +1,7 @@
 import { pool } from "../config/dbConfig";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { env } from "../config/envConfig";
 
 interface Patient {
     name: string;
@@ -39,6 +41,36 @@ export const getPatientsByDoctor = async (doctorId: number) => {
         return rows;
     } catch (error) {
         console.error('Error al obtener los pacientes del doctor:', error);
+        throw error;
+    }
+};
+
+export const loginPatient = async (username: string, password: string) => {
+    try {
+        const query = 'SELECT patient_id, name, username, password FROM patients WHERE username = ?';
+        const [rows]: any = await pool.query(query, [username]);
+
+        if (rows.length === 0) {
+            throw new Error('Usuario no encontrado');
+        }
+
+        const patient = rows[0];
+        const isPasswordValid = await bcrypt.compare(password, patient.password);
+
+        if (!isPasswordValid) {
+            throw new Error('Contraseña incorrecta');
+        }
+
+        const jwtSecret = env.jwt.jwtSecret || 'defaultSecret';
+        const token = jwt.sign(
+            { id: patient.patient_id, name: patient.name, username: patient.username },
+            jwtSecret,
+            { expiresIn: env.jwt.jwtExpiration }
+        );
+
+        return token;
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
         throw error;
     }
 };
