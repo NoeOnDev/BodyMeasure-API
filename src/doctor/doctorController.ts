@@ -1,3 +1,4 @@
+// src/doctor/doctorController.ts
 import { Request, Response } from 'express';
 import { createDoctor, loginDoctor, getAllDoctors } from './doctorServices';
 
