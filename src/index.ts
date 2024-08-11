@@ -3,6 +3,7 @@ import express from 'express';
 import { testConnection } from './config/dbConfig';
 import { env } from './config/envConfig';
 import doctorRoutes from './doctor/doctorRoutes';
+import patientRoutes from './patient/patientRoutes';
 
 const app = express();
 const PORT = env.port;
@@ -15,6 +16,7 @@ app.get('/', (_req, res) => {
 });
 
 app.use(doctorRoutes);
+app.use(patientRoutes);
 
 const startServer = async () => {
     try {

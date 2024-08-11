@@ -30,7 +30,7 @@ export const createDoctor = async (doctor: Doctor) => {
 
 export const loginDoctor = async (username: string, password: string) => {
     try {
-        const query = 'SELECT doctor_id, username, password FROM doctor WHERE username = ?';
+        const query = 'SELECT doctor_id, name, username, password FROM doctor WHERE username = ?';
         const [rows]: any = await pool.query(query, [username]);
 
         if (rows.length === 0) {
@@ -46,7 +46,7 @@ export const loginDoctor = async (username: string, password: string) => {
 
         const jwtSecret = env.jwt.jwtSecret || 'defaultSecret';
         const token = jwt.sign(
-            { id: doctor.id, username: doctor.username },
+            { id: doctor.doctor_id, name: doctor.name, username: doctor.username },
             jwtSecret,
             { expiresIn: env.jwt.jwtExpiration }
         );
