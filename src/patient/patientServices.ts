@@ -1,3 +1,4 @@
+// src/patient/patientServices.ts
 import { pool } from "../config/dbConfig";
 import { ResultSetHeader } from 'mysql2';
 import bcrypt from 'bcrypt';

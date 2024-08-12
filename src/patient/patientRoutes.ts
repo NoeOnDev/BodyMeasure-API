@@ -1,3 +1,4 @@
+// src/patient/patientRoutes.ts
 import { Router } from "express";
 import { addPatient, getPatients, loginPatientController, deletePatientController } from "./patientController";
 import authenticateJWT from "../middleware/authenticateToken";

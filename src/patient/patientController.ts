@@ -1,3 +1,4 @@
+// src/patient/patientController.ts
 import { Request, Response } from 'express';
 import { createPatient, getPatientsByDoctor, loginPatient, deletePatient } from './patientServices';
 import { AuthRequest } from '../middleware/authenticateToken';
