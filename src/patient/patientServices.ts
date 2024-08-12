@@ -1,4 +1,5 @@
 import { pool } from "../config/dbConfig";
+import { ResultSetHeader } from 'mysql2';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { env } from "../config/envConfig";
@@ -74,6 +75,22 @@ export const loginPatient = async (username: string, password: string) => {
         return token;
     } catch (error: any) {
         console.error('Error al iniciar sesión:', error);
+        throw error;
+    }
+};
+
+export const deletePatient = async (patientId: number) => {
+    try {
+        const query = 'DELETE FROM patients WHERE patient_id = ?';
+        const [result, _]: [ResultSetHeader, any] = await pool.query(query, [patientId]);
+
+        if (result.affectedRows === 0) {
+            throw new Error('Paciente no encontrado');
+        }
+
+        return result;
+    } catch (error) {
+        console.error('Error al eliminar el paciente:', error);
         throw error;
     }
 };
