@@ -52,7 +52,7 @@ export const loginDoctor = async (username: string, password: string) => {
         );
 
         return token;
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error al iniciar sesión:', error);
         throw error;
     }

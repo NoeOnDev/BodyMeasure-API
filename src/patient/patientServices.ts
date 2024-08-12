@@ -28,7 +28,10 @@ export const createPatient = async (patient: Patient) => {
 
         const [result] = await pool.query(query, values);
         return result;
-    } catch (error) {
+    } catch (error: any) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            throw new Error('El nombre de usuario ya existe. Por favor, elige uno diferente.');
+        }
         console.error('Error al insertar el paciente en la base de datos:', error);
         throw error;
     }
@@ -69,7 +72,7 @@ export const loginPatient = async (username: string, password: string) => {
         );
 
         return token;
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error al iniciar sesión:', error);
         throw error;
     }
