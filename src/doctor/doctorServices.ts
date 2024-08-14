@@ -8,17 +8,22 @@ interface Doctor {
     name: string;
     username: string;
     password: string;
+    phone?: string;
+    email?: string;
+    age?: number;
+    sex: 'Femenino' | 'Masculino';
 }
 
 export const createDoctor = async (doctor: Doctor) => {
-    const { name, username, password } = doctor;
+    const { name, username, password, phone, email, age, sex } = doctor;
     const saltRounds = 10;
 
     try {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        const query = 'INSERT INTO doctor (name, username, password) VALUES (?, ?, ?)';
-        const values = [name, username, hashedPassword];
+        const query = `INSERT INTO doctor (name, username, password, phone, email, age, sex) 
+                       VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        const values = [name, username, hashedPassword, phone, email, age, sex];
 
         const [result] = await pool.query(query, values);
         return result;
@@ -60,7 +65,7 @@ export const loginDoctor = async (username: string, password: string) => {
 
 export const getAllDoctors = async () => {
     try {
-        const query = 'SELECT doctor_id, name, username FROM doctor';
+        const query = 'SELECT doctor_id, name, username, phone, email, age, sex FROM doctor';
         const [rows]: any = await pool.query(query);
 
         return rows;

@@ -4,8 +4,8 @@ import { createDoctor, loginDoctor, getAllDoctors } from './doctorServices';
 
 export const addDoctor = async (req: Request, res: Response) => {
     try {
-        const { name, username, password } = req.body;
-        await createDoctor({ name, username, password });
+        const { name, username, password, phone, email, age, sex } = req.body;
+        await createDoctor({ name, username, password, phone, email, age, sex });
         res.status(201).json({ message: 'Doctor creado exitosamente' });
     } catch (error) {
         console.error('Error al crear el doctor:', error);
