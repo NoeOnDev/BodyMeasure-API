@@ -41,7 +41,7 @@ export const createPatient = async (patient: Patient) => {
 
 export const getPatientsByDoctor = async (doctorId: number) => {
     try {
-        const query = 'SELECT * FROM patients WHERE responsible_doctor = ?';
+        const query = 'SELECT patient_id, name, username, age, sex, weight, phone, email, height, responsible_doctor FROM patients WHERE responsible_doctor = ?';
         const [rows] = await pool.query(query, [doctorId]);
         return rows;
     } catch (error) {
@@ -92,6 +92,22 @@ export const deletePatient = async (patientId: number) => {
         return result;
     } catch (error) {
         console.error('Error al eliminar el paciente:', error);
+        throw error;
+    }
+};
+
+export const getPatientById = async (patientId: number) => {
+    try {
+        const query = 'SELECT patient_id, name, username, age, sex, weight, phone, email, height, responsible_doctor FROM patients WHERE patient_id = ?';
+        const [rows]: any = await pool.query(query, [patientId]);
+
+        if (rows.length === 0) {
+            throw new Error('Paciente no encontrado');
+        }
+
+        return rows[0];
+    } catch (error) {
+        console.error('Error al obtener el paciente por ID:', error);
         throw error;
     }
 };

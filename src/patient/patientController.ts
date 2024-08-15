@@ -1,6 +1,6 @@
 // src/patient/patientController.ts
 import { Request, Response } from 'express';
-import { createPatient, getPatientsByDoctor, loginPatient, deletePatient } from './patientServices';
+import { createPatient, getPatientsByDoctor, loginPatient, deletePatient, getPatientById } from './patientServices';
 import { AuthRequest } from '../middleware/authenticateToken';
 
 export const addPatient = async (req: AuthRequest, res: Response) => {
@@ -78,6 +78,25 @@ export const deletePatientController = async (req: AuthRequest, res: Response) =
             return res.status(404).json({ message: 'Paciente no encontrado' });
         } else {
             return res.status(500).json({ message: 'Error al eliminar el paciente' });
+        }
+    }
+};
+
+export const getPatientByIdController = async (req: AuthRequest, res: Response) => {
+    try {
+        const patientId = req.user?.id;
+
+        if (!patientId) {
+            return res.status(401).json({ message: 'Paciente no autenticado' });
+        }
+
+        const patient = await getPatientById(patientId);
+        return res.status(200).json(patient);
+    } catch (error: any) {
+        if (error.message === 'Paciente no encontrado') {
+            return res.status(404).json({ message: 'Paciente no encontrado' });
+        } else {
+            return res.status(500).json({ message: 'Error al obtener el paciente' });
         }
     }
 };
