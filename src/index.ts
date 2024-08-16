@@ -4,6 +4,7 @@ import { testConnection } from './config/dbConfig';
 import { env } from './config/envConfig';
 import doctorRoutes from './doctor/doctorRoutes';
 import patientRoutes from './patient/patientRoutes';
+import iotRoutes from './IoT/IoTRoutes';
 
 const app = express();
 const PORT = env.port;
@@ -17,6 +18,7 @@ app.get('/', (_req, res) => {
 
 app.use(doctorRoutes);
 app.use(patientRoutes);
+app.use(iotRoutes);
 
 const startServer = async () => {
     try {
