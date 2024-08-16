@@ -26,7 +26,21 @@ export const processPatientData = async (patientId: number, doctorId: number) =>
 
 export const getPatientHistory = async (patientId: number) => {
     const query = `
-        SELECT * FROM history WHERE patient_id = ? ORDER BY date DESC, time DESC
+        SELECT 
+            h.*, 
+            p.name AS patient_name, 
+            p.sex AS patient_sex,
+            d.name AS doctor_name 
+        FROM 
+            history h
+        JOIN 
+            patients p ON h.patient_id = p.patient_id
+        JOIN 
+            doctor d ON h.doctor_id = d.doctor_id
+        WHERE 
+            h.patient_id = ? 
+        ORDER BY 
+            h.date DESC, h.time DESC
     `;
     const [rows] = await pool.query(query, [patientId]);
     return rows;
