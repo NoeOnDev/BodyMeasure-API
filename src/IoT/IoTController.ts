@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { processPatientData, getPatientHistory } from './IoTService';
 import { AuthRequest } from '../middleware/authenticateToken';
 import { getPatientById } from '../patient/patientServices';
@@ -37,3 +37,20 @@ export const getPatientHistoryData = async (req: AuthRequest, res: Response) => 
         return res.status(500).json({ message: 'Error al obtener el historial del paciente' });
     }
 };
+
+export const getHistoryByPatientId = async (req: Request, res: Response) => {
+    try {
+        const patientId = parseInt(req.params.id, 10);
+
+        if (isNaN(patientId)) {
+            return res.status(400).json({ message: 'ID de paciente inválido' });
+        }
+
+        const history = await getPatientHistory(patientId);
+        return res.status(200).json(history);
+    } catch (error: any) {
+        console.error('Error al obtener el historial del paciente:', error);
+        return res.status(500).json({ message: 'Error al obtener el historial del paciente' });
+    }
+};
+
