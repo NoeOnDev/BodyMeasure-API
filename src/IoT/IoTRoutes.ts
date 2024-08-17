@@ -6,6 +6,6 @@ const router = Router();
 
 router.get('/patient/iot', authenticateJWT, getPatientIoTData);
 router.get('/patient/history', authenticateJWT, getPatientHistoryData);
-router.get('/patient/history/:id', getHistoryByPatientId);
+router.get('/patient/history/:id', authenticateJWT, getHistoryByPatientId);
 
 export default router;
