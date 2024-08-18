@@ -5,13 +5,13 @@ import { getIoTData, applyFormulas } from './utils';
 
 const saveHistory = async (patientId: number, doctorId: number, data: any) => {
     const query = `
-        INSERT INTO history (patient_id, doctor_id, date, time, age, height, mine, mm, pro, mlgt, act, bmi, icw, ecw, fm, pfm, resistance, reactance, status)
+        INSERT INTO history (patient_id, doctor_id, date, time, age, height, mine, mm, pro, mlgt, act, imc, icw, ecw, mg, pmg, resistance, reactance, status)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
     `;
     const date = moment().tz('America/Mexico_City').format('YYYY-MM-DD');
     const time = moment().tz('America/Mexico_City').format('HH:mm:ss');
     const values = [
-        patientId, doctorId, date, time, data.age, data.height, data.MINE, data.MM, data.PRO, data.MLGT, data.ACT, data.BMI, data.ICW, data.ECW, data.MG, data.PFM, data.resistance, data.reactance
+        patientId, doctorId, date, time, data.age, data.height, data.MINE, data.MM, data.PRO, data.MLGT, data.ACT, data.IMC, data.ICW, data.ECW, data.MG, data.PMG, data.resistance, data.reactance
     ];
     await pool.query(query, values);
 };

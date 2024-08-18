@@ -40,8 +40,8 @@ export const applyFormulas = (height: number, weight: number, sex: string, resis
     const ECW = MLGT * 0.29;
     const MINE = MLGT * 0.07;
     const MG = weight - MLGT + 1;
-    const PFM = (MG / weight) * 100;
-    const BMI = (weight / ((height / 100) ** 2));
+    const PMG = (MG / weight) * 100;
+    const IMC = (weight / ((height / 100) ** 2));
     const MM = (height ** 2 / resistance) / 2;
     const PRO = weight - ACT - MINE - MG;
 
@@ -52,8 +52,8 @@ export const applyFormulas = (height: number, weight: number, sex: string, resis
         ECW: roundToTwoDecimals(ECW),
         MINE: roundToTwoDecimals(MINE),
         MG: roundToTwoDecimals(MG),
-        PFM: roundToTwoDecimals(PFM),
-        BMI: roundToTwoDecimals(BMI),
+        PMG: roundToTwoDecimals(PMG),
+        IMC: roundToTwoDecimals(IMC),
         MM: roundToTwoDecimals(MM),
         PRO: roundToTwoDecimals(PRO)
     };
