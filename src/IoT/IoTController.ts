@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { processPatientData, getPatientHistory } from './IoTService';
+import { processPatientData, getPatientHistory, deleteHistoryById } from './IoTService';
 import { AuthRequest } from '../middleware/authenticateToken';
 import { getPatientById } from '../patient/patientServices';
 
@@ -54,3 +54,18 @@ export const getHistoryByPatientId = async (req: Request, res: Response) => {
     }
 };
 
+export const deleteHistory = async (req: Request, res: Response) => {
+    try {
+        const historyId = parseInt(req.params.id, 10);
+
+        if (isNaN(historyId)) {
+            return res.status(400).json({ message: 'ID de historial inválido' });
+        }
+
+        await deleteHistoryById(historyId);
+        return res.status(200).json({ message: 'Historial eliminado correctamente' });
+    } catch (error: any) {
+        console.error('Error al eliminar el historial:', error);
+        return res.status(500).json({ message: 'Error al eliminar el historial' });
+    }
+};

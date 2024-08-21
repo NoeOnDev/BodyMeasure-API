@@ -1,4 +1,3 @@
-// src/patient/patientServices.ts
 import { pool } from "../config/dbConfig";
 import { ResultSetHeader } from 'mysql2';
 import bcrypt from 'bcrypt';
@@ -80,8 +79,20 @@ export const loginPatient = async (username: string, password: string) => {
     }
 };
 
+export const deletePatientHistory = async (patientId: number) => {
+    try {
+        const query = 'DELETE FROM history WHERE patient_id = ?';
+        await pool.query(query, [patientId]);
+    } catch (error) {
+        console.error('Error al eliminar el historial del paciente:', error);
+        throw error;
+    }
+};
+
 export const deletePatient = async (patientId: number) => {
     try {
+        await deletePatientHistory(patientId);
+
         const query = 'DELETE FROM patients WHERE patient_id = ?';
         const [result, _]: [ResultSetHeader, any] = await pool.query(query, [patientId]);
 

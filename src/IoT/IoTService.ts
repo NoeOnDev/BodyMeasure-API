@@ -45,3 +45,8 @@ export const getPatientHistory = async (patientId: number) => {
     const [rows] = await pool.query(query, [patientId]);
     return rows;
 };
+
+export const deleteHistoryById = async (historyId: number) => {
+    const query = `DELETE FROM history WHERE history_id = ?`;
+    await pool.query(query, [historyId]);
+};
