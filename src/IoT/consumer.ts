@@ -8,46 +8,51 @@ import { env } from "../config/envConfig";
 export const eventEmitter = new EventEmitter();
 
 export const startConsumer = async () => {
-  try {
-    const connection = await amqp.connect(env.amqp.URL_AMQP);
-    const channel = await connection.createChannel();
+  const connect = async () => {
+    try {
+      const connection = await amqp.connect(env.amqp.URL_AMQP);
+      const channel = await connection.createChannel();
 
-    await channel.assertQueue("response_queue", { durable: true });
+      await channel.assertQueue("response_queue", { durable: true });
 
-    channel.consume("response_queue", async (msg) => {
-      if (msg !== null) {
-        const responseMessage = JSON.parse(msg.content.toString());
-        const { patientId, resistance, reactance } = responseMessage;
+      channel.consume("response_queue", async (msg) => {
+        if (msg !== null) {
+          const responseMessage = JSON.parse(msg.content.toString());
+          const { patientId, resistance, reactance } = responseMessage;
 
-        const patient = await getPatientById(patientId);
-        const doctorId = patient.responsible_doctor;
+          const patient = await getPatientById(patientId);
+          const doctorId = patient.responsible_doctor;
 
-        const results = applyFormulas(
-          patient.height,
-          patient.weight,
-          patient.sex,
-          resistance,
-          reactance
-        );
+          const results = applyFormulas(
+            patient.height,
+            patient.weight,
+            patient.sex,
+            resistance,
+            reactance
+          );
 
-        await saveHistory(patientId, doctorId, {
-          age: patient.age,
-          height: patient.height,
-          ...results,
-          resistance,
-          reactance,
-        });
+          await saveHistory(patientId, doctorId, {
+            age: patient.age,
+            height: patient.height,
+            ...results,
+            resistance,
+            reactance,
+          });
 
-        console.log(`Procesado: ${JSON.stringify(results)}`);
+          console.log(`Procesado: ${JSON.stringify(results)}`);
 
-        eventEmitter.emit("iotProcessed", { patientId });
+          eventEmitter.emit("iotProcessed", { patientId });
 
-        channel.ack(msg);
-      }
-    });
+          channel.ack(msg);
+        }
+      });
 
-    console.log("Esperando análisis...");
-  } catch (error) {
-    console.error("Error al iniciar consumer:", error);
-  }
+      console.log("Esperando análisis...");
+    } catch (error) {
+      console.error("Error al iniciar consumer:", error);
+      setTimeout(connect, 5000);
+    }
+  };
+
+  await connect();
 };

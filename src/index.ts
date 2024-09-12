@@ -24,7 +24,7 @@ app.use(iotRoutes);
 const startServer = async () => {
   try {
     await testConnection();
-    await startConsumer();
+    startConsumer();
     app.listen(PORT, () => {
       console.log("Servidor iniciado en el puerto " + PORT + " 🚀");
     });
