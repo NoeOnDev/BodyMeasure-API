@@ -17,6 +17,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/morgan": "^1.9.9",
     "typescript": "^5.5.4"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "moment-timezone": "^0.5.45",
+    "morgan": "^1.10.0",
     "mysql2": "^3.11.0",
     "tsc-watch": "^6.2.0"
   }
