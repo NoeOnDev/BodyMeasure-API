@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "API para el manejo de medidas corporales",
   "devDependencies": {
+    "@types/amqplib": "^0.10.5",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
@@ -19,6 +20,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "amqplib": "^0.10.4",
     "axios": "^1.7.4",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
