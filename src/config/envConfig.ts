@@ -1,4 +1,3 @@
-// src/config/env.ts
 import { config } from "dotenv"
 
 config()
@@ -15,5 +14,8 @@ export const env = {
     jwt: {
         jwtSecret: process.env.JWT_SECRET,
         jwtExpiration: process.env.JWT_EXPIRES_IN,
+    },
+    amqp: {
+        URL_AMQP: process.env.URL_AMQP || "amqp://user:password@localhost",
     },
 }

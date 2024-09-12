@@ -1,4 +1,3 @@
-// src/doctor/doctorServices.ts
 import { pool } from "../config/dbConfig";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';

@@ -3,12 +3,13 @@ import { saveHistory } from "./IoTService";
 import { getPatientById } from "../patient/patientServices";
 import { applyFormulas } from "./utils";
 import EventEmitter from "events";
+import { env } from "../config/envConfig";
 
 export const eventEmitter = new EventEmitter();
 
 export const startConsumer = async () => {
   try {
-    const connection = await amqp.connect("amqp://user:password@98.82.41.126");
+    const connection = await amqp.connect(env.amqp.URL_AMQP);
     const channel = await connection.createChannel();
 
     await channel.assertQueue("response_queue", { durable: true });

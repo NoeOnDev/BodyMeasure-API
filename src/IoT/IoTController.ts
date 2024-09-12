@@ -4,6 +4,7 @@ import { getPatientHistory, deleteHistoryById } from "./IoTService";
 import { AuthRequest } from "../middleware/authenticateToken";
 import { getPatientById } from "../patient/patientServices";
 import { eventEmitter } from "./consumer";
+import { env } from "../config/envConfig";
 
 export const getPatientIoTData = async (req: AuthRequest, res: Response) => {
   try {
@@ -15,7 +16,7 @@ export const getPatientIoTData = async (req: AuthRequest, res: Response) => {
     const patient = await getPatientById(patientId);
     const doctorId = patient.responsible_doctor;
 
-    const connection = await amqp.connect("amqp://user:password@98.82.41.126");
+    const connection = await amqp.connect(env.amqp.URL_AMQP);
     const channel = await connection.createChannel();
 
     await channel.assertQueue("request_queue", { durable: true });

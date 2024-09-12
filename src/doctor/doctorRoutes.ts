@@ -1,4 +1,3 @@
-// src/doctor/doctorRoutes.ts
 import { Router } from 'express';
 import { addDoctor, loginDoctorController, getAllDoctorsController } from './doctorController';
 

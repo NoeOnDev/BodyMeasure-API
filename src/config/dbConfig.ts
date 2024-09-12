@@ -1,4 +1,3 @@
-// src/config/dbConfig.ts
 import mysql from 'mysql2/promise';
 import { env } from './envConfig';
 
