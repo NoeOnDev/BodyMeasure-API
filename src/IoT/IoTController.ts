@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { getPatientHistory, deleteHistoryById } from "./IoTService";
 import { AuthRequest } from "../middleware/authenticateToken";
 import { getPatientById } from "../patient/patientServices";
+import { eventEmitter } from "./consumer";
 
 export const getPatientIoTData = async (req: AuthRequest, res: Response) => {
   try {
@@ -36,7 +37,13 @@ export const getPatientIoTData = async (req: AuthRequest, res: Response) => {
     await channel.close();
     await connection.close();
 
-    return res.status(200).json({ message: "Solicitud enviada correctamente" });
+    eventEmitter.once("iotProcessed", (data) => {
+      if (data.patientId === patientId) {
+        return res.status(200).json({
+          message: "Diagnóstico procesado y almacenado correctamente",
+        });
+      }
+    });
   } catch (error) {
     console.error("Error al enviar solicitud:", error);
     return res.status(500).json({ message: "Error al enviar solicitud" });

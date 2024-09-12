@@ -2,6 +2,9 @@ import amqp from "amqplib";
 import { saveHistory } from "./IoTService";
 import { getPatientById } from "../patient/patientServices";
 import { applyFormulas } from "./utils";
+import EventEmitter from "events";
+
+export const eventEmitter = new EventEmitter();
 
 export const startConsumer = async () => {
   try {
@@ -35,6 +38,8 @@ export const startConsumer = async () => {
         });
 
         console.log(`Procesado: ${JSON.stringify(results)}`);
+
+        eventEmitter.emit("iotProcessed", { patientId });
 
         channel.ack(msg);
       }

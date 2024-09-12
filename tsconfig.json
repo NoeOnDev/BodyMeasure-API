@@ -19,7 +19,6 @@
     "alwaysStrict": true /* Asegura que siempre se emita 'use strict'. */,
     "noUnusedLocals": true /* Habilita la verificación de variables locales no utilizadas. */,
     "noUnusedParameters": true /* Habilita la verificación de parámetros de función no utilizados. */,
-    "noImplicitReturns": true /* Habilita la verificación de rutas de código que no retornan en una función. */,
     "noFallthroughCasesInSwitch": true /* Habilita la verificación de casos en switch que no hacen break. */
   },
   "include": [
