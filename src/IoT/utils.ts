@@ -1,25 +1,3 @@
-import axios from "axios";
-
-interface IoTData {
-  resistance: number;
-  reactance: number;
-}
-
-export const getIoTData = async (): Promise<IoTData> => {
-  try {
-    const response = await axios.get("http://localhost:5000/read_adc");
-    const data = response.data;
-
-    const resistance = parseFloat(data.R.replace("Ω", ""));
-    const reactance = parseFloat(data.XC.replace("Ω", ""));
-
-    return { resistance, reactance };
-  } catch (error) {
-    console.error("Error al obtener los datos del dispositivo IoT:", error);
-    throw new Error("Error al obtener los datos del dispositivo IoT");
-  }
-};
-
 const roundToTwoDecimals = (num: number) => Math.round(num * 100) / 100;
 
 export const applyFormulas = (

@@ -3,7 +3,7 @@ import { saveHistory } from "./IoTService";
 import { getPatientById } from "../patient/patientServices";
 import { applyFormulas } from "./utils";
 
-const startConsumer = async () => {
+export const startConsumer = async () => {
   try {
     const connection = await amqp.connect("amqp://user:password@98.82.41.126");
     const channel = await connection.createChannel();
@@ -25,7 +25,10 @@ const startConsumer = async () => {
           resistance,
           reactance
         );
+
         await saveHistory(patientId, doctorId, {
+          age: patient.age,
+          height: patient.height,
           ...results,
           resistance,
           reactance,
@@ -42,5 +45,3 @@ const startConsumer = async () => {
     console.error("Error al iniciar consumer:", error);
   }
 };
-
-startConsumer();

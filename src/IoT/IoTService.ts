@@ -1,7 +1,5 @@
 import moment from "moment-timezone";
 import { pool } from "../config/dbConfig";
-import { getPatientById } from "../patient/patientServices";
-import { getIoTData, applyFormulas } from "./utils";
 
 export const saveHistory = async (
   patientId: number,
@@ -9,9 +7,9 @@ export const saveHistory = async (
   data: any
 ) => {
   const query = `
-        INSERT INTO history (patient_id, doctor_id, date, time, age, height, mine, mm, pro, mlgt, act, imc, icw, ecw, mg, pmg, resistance, reactance, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
-    `;
+          INSERT INTO history (patient_id, doctor_id, date, time, age, height, mine, mm, pro, mlgt, act, imc, icw, ecw, mg, pmg, resistance, reactance, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+      `;
   const date = moment().tz("America/Mexico_City").format("YYYY-MM-DD");
   const time = moment().tz("America/Mexico_City").format("HH:mm:ss");
   const values = [
@@ -35,29 +33,6 @@ export const saveHistory = async (
     data.reactance,
   ];
   await pool.query(query, values);
-};
-
-export const processPatientData = async (
-  patientId: number,
-  doctorId: number
-) => {
-  const patient = await getPatientById(patientId);
-  const iotData = await getIoTData();
-  const results = applyFormulas(
-    patient.height,
-    patient.weight,
-    patient.sex,
-    iotData.resistance,
-    iotData.reactance
-  );
-  await saveHistory(patientId, doctorId, {
-    ...results,
-    age: patient.age,
-    height: patient.height,
-    resistance: iotData.resistance,
-    reactance: iotData.reactance,
-  });
-  return results;
 };
 
 export const getPatientHistory = async (patientId: number) => {
