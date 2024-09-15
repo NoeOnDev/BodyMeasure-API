@@ -1,4 +1,4 @@
-import amqp from "amqplib";
+import mqtt from "mqtt";
 import { Request, Response } from "express";
 import { getPatientHistory, deleteHistoryById } from "./IoTService";
 import { AuthRequest } from "../middleware/authenticateToken";
@@ -16,27 +16,31 @@ export const getPatientIoTData = async (req: AuthRequest, res: Response) => {
     const patient = await getPatientById(patientId);
     const doctorId = patient.responsible_doctor;
 
-    const connection = await amqp.connect(env.amqp.URL_AMQP);
-    const channel = await connection.createChannel();
+    const client = mqtt.connect(env.mqtt.URL_MQTT);
 
-    await channel.assertQueue("request_queue", { durable: true });
+    client.on("connect", () => {
+      const requestMessage = {
+        patientId: patientId,
+        doctorId: doctorId,
+        requestType: "iot_analysis",
+      };
 
-    const requestMessage = {
-      patientId: patientId,
-      doctorId: doctorId,
-      requestType: "iot_analysis",
-    };
-
-    channel.sendToQueue(
-      "request_queue",
-      Buffer.from(JSON.stringify(requestMessage)),
-      {
-        persistent: true,
-      }
-    );
-
-    await channel.close();
-    await connection.close();
+      client.publish(
+        "request.topic",
+        JSON.stringify(requestMessage),
+        { qos: 1, retain: true },
+        (err) => {
+          if (err) {
+            console.error("Error al enviar solicitud:", err);
+            return res
+              .status(500)
+              .json({ message: "Error al enviar solicitud" });
+          } else {
+            console.log("Solicitud enviada correctamente");
+          }
+        }
+      );
+    });
 
     eventEmitter.once("iotProcessed", (data) => {
       if (data.patientId === patientId) {

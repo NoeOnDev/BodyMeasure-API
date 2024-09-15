@@ -18,4 +18,7 @@ export const env = {
     amqp: {
         URL_AMQP: process.env.URL_AMQP || "amqp://user:password@localhost",
     },
+    mqtt: {
+        URL_MQTT: process.env.URL_MQTT || "mqtt://localhost",
+    },
 }
